@@ -26,7 +26,7 @@ namespace MultipleDelivery_MOD.src
     {
         public const string MODGUID = "org.ProfessorCat305.MultipleDelivery";
         public const string MODNAME = "MultipleDelivery";
-        public const string VERSION = "0.0.1";
+        public const string VERSION = "1.0.0";
         public const string DEBUGVERSION = "";
 
         public static bool LoadCompleted;
@@ -55,7 +55,7 @@ namespace MultipleDelivery_MOD.src
             var executingAssembly = Assembly.GetExecutingAssembly();
 
             foreach (Type type in executingAssembly.GetTypes()) {
-                if (type.Namespace?.StartsWith("MultipleDelivery.Patches", StringComparison.Ordinal) == true) { Harmony.PatchAll(type); }
+                if (type.Namespace?.StartsWith("MultipleDelivery_MOD.src", StringComparison.Ordinal) == true) { Harmony.PatchAll(type); }
             }
 
             LDBTool.PreAddDataAction += PreAddDataAction;
@@ -66,13 +66,15 @@ namespace MultipleDelivery_MOD.src
 
         public void Export(BinaryWriter w)
         {
-
+            DispenserMutiFilterManager.Export(w);
         }
         public void Import(BinaryReader r)
         {
+            DispenserMutiFilterManager.Import(r);
         }
         public void IntoOtherSave()
         {
+            DispenserMutiFilterManager.IntoOtherSave();
         }
 
         public string Version => VERSION;
