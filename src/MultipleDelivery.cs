@@ -26,7 +26,7 @@ namespace MultipleDelivery_MOD.src
     {
         public const string MODGUID = "org.ProfessorCat305.MultipleDelivery";
         public const string MODNAME = "MultipleDelivery";
-        public const string VERSION = "1.0.0";
+        public const string VERSION = "1.1.0";
         public const string DEBUGVERSION = "";
 
         public static bool LoadCompleted;

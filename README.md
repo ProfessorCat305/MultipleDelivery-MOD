@@ -1,19 +1,19 @@
 <a href="https://ibb.co/jpm3ZnB"><img src="https://i.ibb.co/6dzDJjV/image.png" alt="image" border="0"></a>
 
-±¾Mod½«Ô­°æÅäËÍÆ÷Ö»ÄÜ¶ÔÒ»ÖÖÎïÆ·½øĞĞÅäËÍÀ©Õ¹ÖÁÍ¬Ê±¶Ô6ÖÖÎïÆ·½øĞĞ¹©Ó¦»òĞèÇó
+æœ¬Modå°†åŸç‰ˆé…é€å™¨åªèƒ½å¯¹ä¸€ç§ç‰©å“è¿›è¡Œé…é€æ‰©å±•è‡³åŒæ—¶å¯¹6ç§ç‰©å“è¿›è¡Œä¾›åº”æˆ–éœ€æ±‚
 
 This Mod extends the original distributor's functionality from delivering only one item to simultaneously supplying or demanding up to six items
 
-## Ä£×éËµÃ÷ | Mod Introduction
-½«ÅäËÍÆ÷µÄÎïÆ·ÖÖÀà´Ó1ÖÖÀ©Õ¹ÖÁ6ÖÖ£¬Ö§³ÖÍ¬Ê±¶Ô6ÖÖÎïÆ·½øĞĞ¹©Ó¦»òĞèÇó£¬Ê¹ÅäËÍÆ÷µÄÊ¹ÓÃ¸ü¼ÓÁé»î£¬ÊÊÓÃÓÚ¸ü¶àµÄ³¡¾°¡£
+## æ¨¡ç»„è¯´æ˜ | Mod Introduction
+å°†é…é€å™¨çš„ç‰©å“ç§ç±»ä»1ç§æ‰©å±•è‡³6ç§ï¼Œæ”¯æŒåŒæ—¶å¯¹6ç§ç‰©å“è¿›è¡Œä¾›åº”æˆ–éœ€æ±‚ï¼Œä½¿é…é€å™¨çš„ä½¿ç”¨æ›´åŠ çµæ´»ï¼Œé€‚ç”¨äºæ›´å¤šçš„åœºæ™¯ã€‚
 
 The delivery device's item categories have been expanded from 1 to 6, supporting simultaneous supply or demand for all six items, making the device more flexible and suitable for a wider range of scenarios.
 
-Ê¹ÅäËÍÆ÷ÓëÎïÁ÷ËşĞÎ³É²îÒì»¯¾ºÕù£¬ÎïÁ÷Ëş¸ºÔğ´óÅúÁ¿ÎïÆ·µÄÔËÊä£¬¶øÅäËÍÆ÷ÔòÊÊºÏĞ¡ÅúÁ¿¡¢¶àÑù»¯µÄÎïÆ·¹©Ó¦ºÍĞèÇó¡£ÌØ±ğÊÇ½¨Öş³¬ÊĞµÄ½¨Ôì
+ä½¿é…é€å™¨ä¸ç‰©æµå¡”å½¢æˆå·®å¼‚åŒ–ç«äº‰ï¼Œç‰©æµå¡”è´Ÿè´£å¤§æ‰¹é‡ç‰©å“çš„è¿è¾“ï¼Œè€Œé…é€å™¨åˆ™é€‚åˆå°æ‰¹é‡ã€å¤šæ ·åŒ–çš„ç‰©å“ä¾›åº”å’Œéœ€æ±‚ã€‚ç‰¹åˆ«æ˜¯å»ºç­‘è¶…å¸‚çš„å»ºé€ 
 
 To differentiate the delivery device from the logistics tower, the logistics tower is responsible for the transportation of large quantities of goods, while the delivery device is suitable for small-batch, diversified supply and demand of goods. This is particularly relevant to the construction of supermarkets
 
-½ûÓÃ/Ğ¶ÔØ±¾modÇ°ÇëÈ·±£´æµµÖĞÅäËÍÆ÷ÎŞÑ¡ÔñÎïÆ·£¬ÒÔ¼°Ã»ÓĞÅäËÍÔËÊä»úÔÚÂ·Í¾ÖĞ£¬·ñÔò²»±£Ö¤¶ÁµµÕı³£
+ç¦ç”¨/å¸è½½æœ¬modå‰è¯·ç¡®ä¿å­˜æ¡£ä¸­é…é€å™¨æ— é€‰æ‹©ç‰©å“ï¼Œä»¥åŠæ²¡æœ‰é…é€è¿è¾“æœºåœ¨è·¯é€”ä¸­ï¼Œå¦åˆ™ä¸ä¿è¯è¯»æ¡£æ­£å¸¸
 
 Before disabling/uninstalling this mod, please ensure that there are no selected items from the delivery system in the archive, and that there are no delivery planes on the way, otherwise the file reading cannot be guaranteed to be normal
 

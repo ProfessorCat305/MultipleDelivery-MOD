@@ -16,7 +16,7 @@ namespace MultipleDelivery_MOD.src
         // 私有构造函数，禁止外部实例化
         private DispenserMutiFilterManager() { }
 
-        // 全局访问点,太空电梯轨道设施配对管理器
+        // 全局访问点,配送器额外5格物品选择管理器
         public static DispenserMutiFilterManager Instance => _instance;
 
         private static Dictionary<int, Dictionary<int, int[]>> DispenserMutiFilterdata = new Dictionary<int, Dictionary<int, int[]>>();
