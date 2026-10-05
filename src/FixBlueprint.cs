@@ -10,6 +10,9 @@ namespace MultipleDelivery_MOD.src
         public static void BuildingParameters_CopyFromFactoryObject_Patch(ref BuildingParameters __instance, int objectId, PlanetFactory factory)
         {
             EntityData[] entityPool = factory.entityPool;
+            if (objectId <= 0 || entityPool[objectId].id != objectId) {
+                return;
+            }
             int dispenserId = entityPool[objectId].dispenserId;
             if (dispenserId != 0) {
                 //__instance.type = BuildingType.Dispenser;
@@ -48,12 +51,14 @@ namespace MultipleDelivery_MOD.src
             //LogError($"ApplyPrebuildParametersToEntity");
             EntityData[] entityPool = factory.entityPool;
             if (entityId > 0 && entityPool[entityId].id == entityId) {
-                int dispenserId = entityPool[entityId].dispenserId;
-                if (dispenserId != 0 && parameters != null && parameters.Length >= 128) {
-                    DispenserComponent[] dispenserPool = factory.transport.dispenserPool;
-                    for (int i = 0; i < 5; i++) {
-                        DispenserMutiFilterManager.Instance.SetDispenserFilter(factory.planetId, dispenserId, i, parameters[120 + i]);
-                        //LogError($"ApplyPrebuildParametersToEntity i {i} {parameters[120 + i]}");
+                if (entityId > 0 && entityPool[entityId].id == entityId) {
+                    int dispenserId = entityPool[entityId].dispenserId;
+                    if (dispenserId != 0 && parameters != null && parameters.Length >= 128) {
+                        DispenserComponent[] dispenserPool = factory.transport.dispenserPool;
+                        for (int i = 0; i < 5; i++) {
+                            DispenserMutiFilterManager.Instance.SetDispenserFilter(factory.planetId, dispenserId, i, parameters[120 + i]);
+                            //LogError($"ApplyPrebuildParametersToEntity i {i} {parameters[120 + i]}");
+                        }
                     }
                 }
             }
