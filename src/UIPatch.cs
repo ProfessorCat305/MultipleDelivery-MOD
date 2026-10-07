@@ -6,6 +6,7 @@ using static MultipleDelivery_MOD.src.DispenserPatch;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Contexts;
 using UnityEngine.EventSystems;
+using static MultipleDelivery_MOD.src.MultipleDelivery;
 
 namespace MultipleDelivery_MOD.src
 {
@@ -27,6 +28,8 @@ namespace MultipleDelivery_MOD.src
         private static Button _button;
 
         private static Sprite _tagNotSelectedSprite;
+
+        private static Dictionary<GameObject, UIFilter> _btnToFilterMap = new Dictionary<GameObject, UIFilter>();
 
         [HarmonyPatch(typeof(VFPreload), "InvokeOnLoadWorkEnded")]
         [HarmonyPostfix]
@@ -67,6 +70,7 @@ namespace MultipleDelivery_MOD.src
                     gameObject2.transform.localScale = Vector3.one;
                     gameObject2.transform.localPosition = new Vector3(-70f * (i + 1), 0f, 0f);
                     _uiFilter[i] = new UIFilter(i, gameObject1, gameObject2, dispenserWindow.transform);
+                    _btnToFilterMap[gameObject2] = _uiFilter[i];
                 }
             }
         }
@@ -96,6 +100,21 @@ namespace MultipleDelivery_MOD.src
                     _uiFilter[i].OnUpdate(dispenserComponent, __instance.factory, __instance.dispenserId);
                 }
             }
+        }
+
+        public static UIFilter GetFilterByPressedChild(GameObject pressedChildGo)
+        {
+            if (pressedChildGo == null) return null;
+            Transform t = pressedChildGo.transform;
+            int depth = 0;
+            while (t != null && depth < 20) {
+                if (_btnToFilterMap.TryGetValue(t.gameObject, out var filter)) {
+                    return filter;
+                }
+                t = t.parent;
+                depth++;
+            }
+            return null;
         }
     }
 
@@ -135,6 +154,7 @@ namespace MultipleDelivery_MOD.src
             incImage1 = _uiFilterButton.transform.GetChild(3).GetComponent<Image>();
             incImage2 = _uiFilterButton.transform.GetChild(4).GetComponent<Image>();
             incImage3 = _uiFilterButton.transform.GetChild(5).GetComponent<Image>();
+            //_uiFilterButton.onClick += OnSelectItemClick;
 
             _baseTransform = baseTransform;
         }
@@ -146,7 +166,7 @@ namespace MultipleDelivery_MOD.src
 
             Dictionary<int, int[]> MutiFilterdata = DispenserMutiFilterManager.Instance.GetMutiFilterdata(LocalPlanetId);
             int[] filterData = MutiFilterdata[LocalDispenserId];
-            
+
             int itemId = filterData[filterIndex];
             if (itemId > 0) {
                 ItemProto itemProto = LDB.items.Select(itemId);
@@ -253,10 +273,10 @@ namespace MultipleDelivery_MOD.src
             //this.pointerInIcon = false;
         }
 
-        
+
 
         // 读取箱子内物品数量
-        private void CalculateStorageTotalCount(DispenserComponent dispenserComponent, int itemId, out int count, out int inc)
+        private static void CalculateStorageTotalCount(DispenserComponent dispenserComponent, int itemId, out int count, out int inc)
         {
             count = 0;
             inc = 0;
@@ -270,6 +290,105 @@ namespace MultipleDelivery_MOD.src
                 }
                 while (storageComponent != null);
             }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(UIDispenserWindow), "OnItemIconMouseDown")]
+        public static bool UIDispenserWindow_OnItemIconMouseDown_Prefix(ref UIDispenserWindow __instance, BaseEventData evt, ref bool ___insplit)
+        {
+            if (__instance.dispenserId == 0 || __instance.factory == null) {
+                return true;
+            }
+            DispenserComponent dispenserComponent = __instance.transport.dispenserPool[__instance.dispenserId];
+            if (dispenserComponent == null || dispenserComponent.id != __instance.dispenserId) {
+                return true;
+            }
+            PointerEventData pointerEventData = evt as PointerEventData;
+            if (pointerEventData == null) {
+                return true;
+            }
+            GameObject pressedGo = pointerEventData.pointerCurrentRaycast.gameObject;
+            if (pressedGo == null) {
+                return true;
+            }
+
+            // 从点击的子物体向上遍历，找到根gameObject2，拿到UIFilter
+            UIFilter filter = UIDispenserWindowPatch.GetFilterByPressedChild(pressedGo);
+            if (filter != null) {
+                Dictionary<int, int[]> MutiFilterdata = DispenserMutiFilterManager.Instance.GetMutiFilterdata(__instance.factory.planetId);
+                int[] filterData = MutiFilterdata[__instance.dispenserId];
+
+                int itemId = filterData[filter.filterIndex];
+                if (__instance.player.inhandItemId == 0) {
+                    if (pointerEventData.button == PointerEventData.InputButton.Right) {
+                        int num;
+                        int num2;
+                        CalculateStorageTotalCount(dispenserComponent, itemId, out num, out num2);
+                        if (num > 0) {
+                            UIRoot.instance.uiGame.OpenGridSplit(itemId, num, Input.mousePosition);
+                            ___insplit = true;
+                            return false;
+                        }
+                    }
+                } else if (__instance.player.inhandItemId == itemId && itemId > 0 && pointerEventData.button == PointerEventData.InputButton.Left && dispenserComponent.storage != null) {
+                    int handItemInc_Unsafe;
+                    int num3 = __instance.factory.InsertIntoStorage(dispenserComponent.storage.bottomStorage.entityId, __instance.player.inhandItemId, __instance.player.inhandItemCount, __instance.player.inhandItemInc, out handItemInc_Unsafe, false);
+                    __instance.player.AddHandItemCount_Unsafe(-num3);
+                    __instance.player.SetHandItemInc_Unsafe(handItemInc_Unsafe);
+                    if (__instance.player.inhandItemCount <= 0) {
+                        __instance.player.SetHandItems(0, 0, 0);
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(UIDispenserWindow), "OnItemIconMouseUp")]
+        public static bool UIDispenserWindow_OnItemIconMouseUp_Prefix(ref UIDispenserWindow __instance, BaseEventData evt, ref bool ___insplit)
+        {
+            if (__instance.dispenserId == 0 || __instance.factory == null) {
+                return true;
+            }
+            DispenserComponent dispenserComponent = __instance.transport.dispenserPool[__instance.dispenserId];
+            if (dispenserComponent == null || dispenserComponent.id != __instance.dispenserId) {
+                return true;
+            }
+            PointerEventData pointerEventData = evt as PointerEventData;
+            if (pointerEventData == null) {
+                return true;
+            }
+
+            GameObject pressedGo = pointerEventData.pointerPress;
+            if (pressedGo == null) {
+                return true;
+            }
+
+            // 从点击的子物体向上遍历，找到根gameObject2，拿到UIFilter
+            UIFilter filter = UIDispenserWindowPatch.GetFilterByPressedChild(pressedGo);
+            if (filter != null) {
+                Dictionary<int, int[]> MutiFilterdata = DispenserMutiFilterManager.Instance.GetMutiFilterdata(__instance.factory.planetId);
+                int[] filterData = MutiFilterdata[__instance.dispenserId];
+
+                int itemId = filterData[filter.filterIndex];
+
+                if (___insplit) {
+                    if (dispenserComponent.storage != null) {
+                        int count = UIRoot.instance.uiGame.CloseGridSplit();
+                        if (__instance.player.inhandItemId == 0 && __instance.player.inhandItemCount == 0 && itemId > 0) {
+                            int handItemInc_Unsafe;
+                            int handItemCount_Unsafe = __instance.factory.PickFromStorage(dispenserComponent.storage.bottomStorage.entityId, itemId, count, out handItemInc_Unsafe);
+                            __instance.player.SetHandItemId_Unsafe(itemId);
+                            __instance.player.SetHandItemCount_Unsafe(handItemCount_Unsafe);
+                            __instance.player.SetHandItemInc_Unsafe(handItemInc_Unsafe);
+                        }
+                    }
+                    ___insplit = false;
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
