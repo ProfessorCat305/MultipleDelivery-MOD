@@ -59,6 +59,7 @@ namespace MultipleDelivery_MOD.src
                             DispenserMutiFilterManager.Instance.SetDispenserFilter(factory.planetId, dispenserId, i, parameters[120 + i]);
                             //LogError($"ApplyPrebuildParametersToEntity i {i} {parameters[120 + i]}");
                         }
+                        factory.transport.RefreshDispenserTraffic(dispenserId);
                     }
                 }
             }
@@ -78,6 +79,7 @@ namespace MultipleDelivery_MOD.src
                         DispenserMutiFilterManager.Instance.SetDispenserFilter(factory.planetId, dispenserId, i, __instance.parameters[120 + i]);
                         //LogError($"PasteToFactoryObject i {i} {__instance.parameters[120 + i]}");
                     }
+                    factory.transport.RefreshDispenserTraffic(dispenserId);
                 }
             }
         }
